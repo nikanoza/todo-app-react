@@ -3,3 +3,7 @@ export type task = {
   active: boolean;
   id: number;
 };
+
+type StyledElementPropsType = {
+  darkMode: boolean;
+};

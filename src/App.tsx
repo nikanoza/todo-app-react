@@ -1,29 +1,57 @@
-import { lightMobile } from "assets";
+import { lightMobile, darkMobile, darkDesktop, lightDesktop } from "assets";
 import { NewTask, Task } from "components";
 import { useState } from "react";
 import styled from "styled-components";
-import { Moon, Title } from "svg";
-import { task } from "types";
-
-const taskList = [
-  {
-    text: "nika dfsdf sdfsdf sdf sdf sd fsd fsdf sdf sdfsd  fwef sdfhdgfhdfgswdf sd gre gdfvjh rd fyjkgfdhdsdffg tdfg jdgfj strfdgj ",
-    active: true,
-    id: 1,
-  },
-  {
-    text: "nini",
-    active: true,
-    id: 2,
-  },
-];
+import { Moon, Sun, Title } from "svg";
+import { StyledElementPropsType, task } from "types";
 
 function App() {
-  const [tasks, setTasks] = useState<task[]>(taskList);
+  const [tasks, setTasks] = useState<task[]>([]);
   const [displayStatus, setDisplayStatus] = useState<string>("All");
+  const [darkMode, setDarkMode] = useState<boolean>(false);
 
   const actives = tasks.filter((task) => task.active);
-  const completed = tasks.filter((task) => task.active);
+  const completed = tasks.filter((task) => !task.active);
+
+  const addTask = (newTask: task) => {
+    const clone = tasks.slice();
+    clone.push(newTask);
+    setTasks(clone);
+  };
+
+  const updateTaskStatus = (id: number) => {
+    const clone = tasks.slice();
+    const task = clone.find((item) => item.id === id);
+    if (task) {
+      task["active"] = !task?.active;
+    }
+    setTasks(clone);
+  };
+
+  const deleteTask = (id: number) => {
+    const clone = tasks.slice();
+    const taskIndex = clone.findIndex((item) => item.id === id);
+    clone.splice(taskIndex, 1);
+    setTasks(clone);
+  };
+
+  const clearCompleted = () => {
+    const clone = tasks.slice();
+    const clear = clone.filter((task) => !task.active);
+    setTasks(clear);
+  };
+
+  const changeDisplay = (text: string) => {
+    setDisplayStatus(text);
+  };
+
+  const changeDarkMode = () => {
+    setDarkMode(true);
+  };
+
+  const changeLightMode = () => {
+    setDarkMode(false);
+  };
 
   const array =
     displayStatus === "All"
@@ -33,43 +61,70 @@ function App() {
       : completed;
 
   return (
-    <AppComponent>
+    <AppComponent darkMode={darkMode}>
       <Header>
         <Title />
-        <Moon />
+        {darkMode ? (
+          <Sun onClick={changeLightMode} />
+        ) : (
+          <Moon onClick={changeDarkMode} />
+        )}
       </Header>
-      <NewTask />
+      <NewTask addTask={addTask} tasks={tasks} darkMode={darkMode} />
       <List>
         {array.map((item) => (
-          <>
-            <Task item={item} key={item.id} />
+          <div key={item.id}>
+            <Task
+              item={item}
+              updateTaskStatus={updateTaskStatus}
+              deleteTask={deleteTask}
+            />
             <Hr />
-          </>
+          </div>
         ))}
         <Panel>
-          <span>{tasks.length} items left</span>
-          <Button active={false}>Clear Completed</Button>
+          <span>{array.length} items left</span>
+          <Button active={false} onClick={clearCompleted}>
+            Clear Completed
+          </Button>
         </Panel>
       </List>
       <Buttons>
-        <Button active={displayStatus === "All"}>All</Button>
-        <Button active={displayStatus === "actives"}>Active</Button>
-        <Button active={displayStatus === "completed"}>Completed</Button>
+        <Button
+          active={displayStatus === "All"}
+          onClick={() => changeDisplay("All")}
+        >
+          All
+        </Button>
+        <Button
+          active={displayStatus === "actives"}
+          onClick={() => changeDisplay("actives")}
+        >
+          Active
+        </Button>
+        <Button
+          active={displayStatus === "completed"}
+          onClick={() => changeDisplay("completed")}
+        >
+          Completed
+        </Button>
       </Buttons>
     </AppComponent>
   );
 }
 
-const AppComponent = styled.div`
+const AppComponent = styled.div(
+  (props: StyledElementPropsType) => `
   width: 100vw;
-  height: 100vh;
-  background-color: #f2f2f2;
-  background-image: url(${lightMobile});
+  min-height: 100vh;
+  background-color: ${props.darkMode ? "#171823" : "#f2f2f2"};
+  background-image: url(${props.darkMode ? darkMobile : lightMobile});
   background-repeat: no-repeat;
   background-size: 100%;
   padding: 48px 24px 126px 24px;
   font-family: "Josefin Sans", sans-serif;
-`;
+`
+);
 
 const Header = styled.header`
   width: 100%;
