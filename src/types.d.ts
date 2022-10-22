@@ -1,5 +1,5 @@
 export type task = {
   text: string;
-  status: boolean;
+  active: boolean;
   id: number;
 };
