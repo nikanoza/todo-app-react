@@ -11,18 +11,22 @@ const Task: React.FC<{
   item: task;
   updateTaskStatus: (id: number) => void;
   deleteTask: (id: number) => void;
+  darkMode: boolean;
 }> = (props) => {
   return (
     <TaskComponent>
       <Checkbox
+        darkMode={props.darkMode}
         onClick={() => {
           props.updateTaskStatus(props.item.id);
         }}
         status={props.item.active}
       >
-        <Check />
+        {props.item.active && <Check />}
       </Checkbox>
-      <Text status={props.item.active}>{props.item.text}</Text>
+      <Text status={props.item.active} darkMode={props.darkMode}>
+        {props.item.text}
+      </Text>
       <Cross onClick={props.deleteTask} id={props.item.id} />
     </TaskComponent>
   );
@@ -34,10 +38,14 @@ const TaskComponent = styled.div`
   display: flex;
   align-items: center;
   padding: 16px 20px 20px 20px;
+  @media (min-width: 768px) {
+    height: 64px;
+  }
 `;
 
 type CheckboxTypes = {
   status: boolean;
+  darkMode: boolean;
 };
 
 const Checkbox = styled.span(
@@ -47,7 +55,14 @@ const Checkbox = styled.span(
   display: flex;
   justify-content: center;
   align-items: center;
-  border: ${props.status ? "none" : "1px solid #e3e4f1"};
+  cursor: pointer;
+  border: ${
+    props.status
+      ? "none"
+      : props.darkMode
+      ? "1px solid #393A4B"
+      : "1px solid #e3e4f1"
+  };
   border-radius: 50%;
   background: ${
     props.status
@@ -60,13 +75,25 @@ const Checkbox = styled.span(
 const Text = styled.p(
   (props: CheckboxTypes) => `
   width: 240px;
-  color: ${props.status ? "#D1D2DA" : "#494c6b"};
+  color: ${
+    props.status && props.darkMode
+      ? "#494c6b"
+      : props.status && !props.darkMode
+      ? "#D1D2DA"
+      : props.darkMode
+      ? "#C8CBE7"
+      : "#494C6B"
+  };
   margin-right: 12px;
   margin-left: 12px;
   text-decoration: ${props.status ? "line-through" : "none"};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media(min-width: 768px){
+    font-size: 18px;
+    line-height: 18px;
+  }
 `
 );
 

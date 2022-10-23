@@ -66,12 +66,21 @@ const Card = styled.div(
   width: 100%;
   height: 48px;
   background-color:${props.darkMode ? "#25273D" : "white"};
-  box-shadow: 0px 35px 50px -15px rgba(194, 195, 214, 0.5);
+  box-shadow: ${
+    props.darkMode
+      ? "0px 35px 50px -15px rgba(0, 0, 0, 0.5)"
+      : "0px 35px 50px -15px rgba(194, 195, 214, 0.5)"
+  };
   border-radius: 5px;
   margin-top: 40px;
   padding: 14px 20px;
   display: flex;
   column-gap: 12px;
+  @media (min-width: 768px){
+    max-width: 540px;
+    height: 64px;
+    align-items: center;
+  }
 `
 );
 
@@ -87,6 +96,7 @@ const Checkbox = styled.span(
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   border: ${
     props.status
       ? "none"
@@ -115,6 +125,10 @@ const Input = styled.input(
   outline: none;
   border: none;
   background-color: transparent;
+  @media(min-width: 768px){
+    font-size: 18px;
+    line-height: 18px;
+  }
 `
 );
 

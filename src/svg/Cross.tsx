@@ -25,4 +25,5 @@ const Svg = styled(attrs)`
   width: 18px;
   height: 18px;
   margin-left: auto;
+  cursor: pointer;
 `;

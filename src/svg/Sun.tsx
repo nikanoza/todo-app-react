@@ -19,6 +19,7 @@ const attrs = styled.svg.attrs({
 const Svg = styled(attrs)`
   width: 26px;
   height: 26px;
+  cursor: pointer;
 `;
 
 export default Sun;
