@@ -1,6 +1,6 @@
 ![This is header image](/public/favicon.png)
 
-# Interactive rating component
+# Todo app
 
 ### Table of Contents
 * [Prerequisites](#Prerequisites)
