@@ -10,8 +10,8 @@ function App() {
   const [displayStatus, setDisplayStatus] = useState<string>("All");
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
-  const actives = tasks.filter((task) => task.active);
-  const completed = tasks.filter((task) => !task.active);
+  const actives = tasks.filter((task) => !task.active);
+  const completed = tasks.filter((task) => task.active);
 
   const addTask = (newTask: task) => {
     const clone = tasks.slice();
